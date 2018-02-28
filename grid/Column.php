@@ -12,12 +12,18 @@ class Column extends \yii\grid\Column
 
     public function init()
     {
-        SortableAsset::register($this->grid->view);
-        $this->grid->view->registerJs('initSortableWidgets();', View::POS_READY, 'sortable');
+        parent::init();
     }
 
-    protected function renderDataCellContent($model, $key, $index)
+    public function renderDataCellContent($model, $key, $index)
     {
+        /*
+        теперь работает при kartik-grid refresh (ajax)
+       */
+        $view = $this->grid->getView();
+        SortableAsset::register($view);
+        $view->registerJs('initSortableWidgets();', View::POS_READY, 'sortable');
+
         return Html::tag('div', '<span class="glyphicon glyphicon-menu-hamburger"></span>', [
             'class' => 'sortable-widget-handler',
             'data-id' => $model->id,
